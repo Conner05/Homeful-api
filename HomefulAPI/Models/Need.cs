@@ -12,6 +12,7 @@ namespace HomefulAPI.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public int Quantity { get; set; }
         public int? OccupantId { get; set; }
         public Occupant Occupant { get; set; }
         [Required]

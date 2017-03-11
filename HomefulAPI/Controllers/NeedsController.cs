@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace HomefulAPI.Controllers
 {
+    [RoutePrefix("api")]
     public class NeedsController : ApiController
     {
         private ApplicationDbContext _dbContext;

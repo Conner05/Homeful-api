@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Data.Entity;
 namespace HomefulAPI.Controllers
 {
+    [RoutePrefix("api")]
     public class LocationsController : ApiController
     {
         private ApplicationDbContext _dbContext;

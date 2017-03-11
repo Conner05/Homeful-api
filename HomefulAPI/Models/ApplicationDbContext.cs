@@ -9,7 +9,13 @@ namespace HomefulAPI.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext() : base("Production")
+        public ApplicationDbContext() : base(
+#if DEBUG
+            "Development"
+#else
+            "Production"
+#endif
+            )
         {
 
         }
