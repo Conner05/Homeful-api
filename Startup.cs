@@ -70,9 +70,10 @@ namespace WebApplication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbcontext)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbcontext, IdentityContext identityContext)
         {
             await dbcontext.Database.EnsureCreatedAsync();
+            await identityContext.Database.EnsureCreatedAsync();
             //await dbcontext.Database.MigrateAsync();
             
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
