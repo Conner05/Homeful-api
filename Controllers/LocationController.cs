@@ -1,11 +1,19 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
+using WebApplication.Data;
 
 namespace WebApplication.Controllers
 {
     public class LocationController : Controller
     {
+		private ApplicationDbContext _dbContext;
+
+		public LocationController(ApplicationDbContext dbContext)
+		{
+			_dbContext = dbContext;
+		}		
+
 		[HttpPost]
 		public IActionResult Create([FromBody] Location item)
 		{
@@ -14,7 +22,8 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			_locationRepository.Add(item);
+			_dbContext.Locations.Add(item);
+			_dbContext.SaveChanges();
 
 			return CreatedAtRoute("GetLocation", new { id = item.Id }, item);
 		}
@@ -22,19 +31,19 @@ namespace WebApplication.Controllers
 		[HttpGet]
 		public IEnumerable<Location> GetAll()
 		{
-			return _locationRepository.GetAll();
+			return _dbContext.Locations.ToList();
 		}
 
 		[HttpGet("{id}", Name = "GetLocation")]
 		public IActionResult GetById(int id)
 		{
-			var need = _locationRepository.Find(id);
-			if (need == null)
+			var location = _dbContext.Locations.Find(id);
+			if (location == null)
 			{
 				return BadRequest();
 			}
 
-			return new ObjectResult(need);
+			return new ObjectResult(location);
 		}
 
 		[HttpPut("{id}")]
@@ -45,7 +54,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			var location = _locationRepository.Find(id);
+			var location = _dbContext.Locations.Find(id);
 			if (location == null)
 			{
 				return NotFound();
@@ -57,20 +66,22 @@ namespace WebApplication.Controllers
             location.Longitude = item.Longitude;
             location.Notes = item.Notes;
 
-			_locationRepository.Update(location);
+			_dbContext.SaveChanges();
+
 			return new NoContentResult();
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var need = _locationRepository.Find(id);
-			if (need == null)
+			var location = _dbContext.Locations.Find(id);
+			if (location == null)
 			{
 				return NotFound();
 			}
 
-			_locationRepository.Remove(id);
+			_dbContext.Remove(location);
+			
 			return new NoContentResult();
 		}
     }

@@ -1,12 +1,20 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
+using WebApplication.Data;
 using System.Collections.Generic;
 
 namespace WebApplication.Controllers
 {
     public class OccupantController : Controller
     {
+		private ApplicationDbContext _dbContext;
+
+		public OccupantController(ApplicationDbContext dbContext)
+		{
+				_dbContext = dbContext;
+		}		
+
 		[HttpPost]
 		public IActionResult Create([FromBody] Occupant item)
 		{
@@ -15,7 +23,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			_occupantRepository.Add(item);
+			_dbContext.Occupants.Add(item);
 
 			return CreatedAtRoute("GetOccupant", new { id = item.Id }, item);
 		}
@@ -23,13 +31,13 @@ namespace WebApplication.Controllers
 		[HttpGet]
 		public IEnumerable<Occupant> GetAll()
 		{
-			return _occupantRepository.GetAll();
+			return _dbContext.Occupants.ToList();
 		}
 
 		[HttpGet("{id}", Name = "GetOccupant")]
 		public IActionResult GetById(int id)
 		{
-			var occupant = _occupantRepository.Find(id);
+			var occupant = _dbContext.Occupants.Find(id);
 			if (occupant == null)
 			{
 				return BadRequest();
@@ -46,7 +54,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			var occupant = _occupantRepository.Find(id);
+			var occupant = _dbContext.Occupants.Find(id);
 			if (occupant == null)
 			{
 				return NotFound();
@@ -61,20 +69,20 @@ namespace WebApplication.Controllers
             occupant.Active = item.Active;
 //TODO:  What about changing an occupant's location
 
-			_occupantRepository.Update(occupant);
+			_dbContext.SaveChanges();
 			return new NoContentResult();
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var need = _occupantRepository.Find(id);
+			var need = _dbContext.Occupants.Find(id);
 			if (need == null)
 			{
 				return NotFound();
 			}
 
-			_occupantRepository.Remove(id);
+			_dbContext.Occupants.Remove(id);
 			return new NoContentResult();
 		}        
     }

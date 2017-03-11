@@ -1,11 +1,20 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
+using WebApplication.Data;
 
 namespace WebApplication.Controllers
 {
 	public class NeedController : Controller
 	{
+		private ApplicationDbContext _dbContext;
+
+		public NeedController(ApplicationDbContext dbContext)
+		{
+				_dbContext = dbContext;
+		}		
+
 		[HttpPost]
 		public IActionResult Create([FromBody] Need item)
 		{
@@ -14,7 +23,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			_needRepository.Add(item);
+			_dbContext.Needs.Add(item);
 
 			return CreatedAtRoute("GetNeed", new { id = item.Id }, item);
 		}
@@ -22,13 +31,14 @@ namespace WebApplication.Controllers
 		[HttpGet]
 		public IEnumerable<Need> GetAll()
 		{
-			return _needRepository.GetAll();
+			return _dbContext.Needs.ToList();
+			
 		}
 
 		[HttpGet("{id}", Name = "GetNeed")]
 		public IActionResult GetById(int id)
 		{
-			var need = _needRepository.Find(id);
+			var need = _dbContext.Needs.Find(id);
 			if (need == null)
 			{
 				return BadRequest();
@@ -45,29 +55,31 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			var need = _needRepository.Find(id);
+			var need = _dbContext.Needs.Find(id);
 			if (need == null)
 			{
 				return NotFound();
 			}
 
 			//set fields to match item passed in
-			need.Medical = item.Medical;
+			need.Name = item.Name;
+			need.UpdatedOn = DateTime.Now;
 
-			_needRepository.Update(need);
+			_dbContext.SaveChanges();
+
 			return new NoContentResult();
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var need = _needRepository.Find(id);
+			var need = _dbContext.Needs.Find(id);
 			if (need == null)
 			{
 				return NotFound();
 			}
 
-			_needRepository.Remove(id);
+			_dbContext.Needs.Remove(id);
 			return new NoContentResult();
 		}
 	}
