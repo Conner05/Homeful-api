@@ -43,7 +43,7 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            string productionConnectionString = Configuration.GetConnectionString("Production");
+            /*string productionConnectionString = Configuration.GetConnectionString("Production");
             if(string.IsNullOrWhiteSpace(productionConnectionString)) {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
@@ -60,7 +60,9 @@ namespace WebApplication
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders();*/
+
+
 
             services.AddMvc();
 
@@ -70,10 +72,11 @@ namespace WebApplication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbcontext, IdentityContext identityContext)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            await dbcontext.Database.EnsureCreatedAsync();
-            await identityContext.Database.EnsureCreatedAsync();
+            var context = new ApplicationDbContext();
+            await context.Database.EnsureCreatedAsync();
+            //await identityContext.Database.EnsureCreatedAsync();
             //await dbcontext.Database.MigrateAsync();
             
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
