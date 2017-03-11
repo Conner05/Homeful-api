@@ -11,5 +11,6 @@ namespace WebApplication.Models {
         public double Longitude { get; set; }
         public string Notes { get; set; }
         public ICollection<Need> Needs { get; set; }
+        public ICollection<Occupant> Occupants { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 using WebApplication.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication.Controllers
 {
@@ -84,6 +85,22 @@ namespace WebApplication.Controllers
 			_dbContext.Remove(location);
 			
 			return new NoContentResult();
+		}
+
+		[HttpGet("/locations/{id}/occupants")]
+		public ICollection<Occupant> GetOccupantsAtLocation(int id) 
+		{
+			var location = _dbContext.Locations.Include(x => x.Occupants).FirstOrDefault(x => x.Id == id);			
+
+			return location?.Occupants ?? null;
+		}
+
+		[HttpGet("/locations/{id}/needs")]
+		public ICollection<Need> GetNeedsAtLocation(int id) 
+		{
+			var location = _dbContext.Locations.Include(x => x.Needs).FirstOrDefault(x => x.Id == id);
+
+			return location?.Needs ?? null;
 		}
     }
 }
