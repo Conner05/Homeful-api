@@ -14,7 +14,7 @@ namespace WebApplication.Data
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlite("local.db");
             
-            return new ApplicationDbContext(optionsBuilder.Options);
+            return new ApplicationDbContext();//optionsBuilder.Options);
         }
     }
 }
