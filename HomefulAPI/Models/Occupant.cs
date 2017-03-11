@@ -27,4 +27,3 @@ namespace HomefulAPI.Models
         public ICollection<Need> Needs { get; set; }
     }
 }
-}
