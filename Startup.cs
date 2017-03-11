@@ -73,7 +73,8 @@ namespace WebApplication
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbcontext)
         {
             await dbcontext.Database.EnsureCreatedAsync();
-
+            await dbcontext.Database.MigrateAsync();
+            
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
