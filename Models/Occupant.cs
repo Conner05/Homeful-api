@@ -12,7 +12,6 @@ namespace WebApplication.Models {
         public string Email { get; set; }
         public DateTime Birthdate { get; set; }
         [DefaultValue("CURRENT_TIMESTAMP")]
-
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
         [Required]
@@ -20,7 +19,7 @@ namespace WebApplication.Models {
         public bool Active { get; set; }
         [Required]
         public int LocationId { get; set; }
-        public virtual Location Location { get; set; }
-        public virtual ICollection<OccupantNeed> OccupantNeeds { get; set; }
+        public Location Location { get; set; }
+        public ICollection<Need> Needs { get; set; }
     }
 }

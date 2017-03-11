@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace WebApplication.Models {
     public class Location {
@@ -9,5 +10,6 @@ namespace WebApplication.Models {
         [Required]
         public double Longitude { get; set; }
         public string Notes { get; set; }
+        public ICollection<Need> Needs { get; set; }
     }
 }
