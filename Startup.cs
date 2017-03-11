@@ -47,15 +47,19 @@ namespace WebApplication
             if(string.IsNullOrWhiteSpace(productionConnectionString)) {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                services.AddDbContext<IdentityContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             }
             else {
                 services.AddDbContext<ApplicationDbContext>(options => 
+                    options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
+                services.AddDbContext<IdentityContext>(options => 
                     options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
             }
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
