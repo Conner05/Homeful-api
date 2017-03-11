@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 using WebApplication.Data;
+using System.Linq;
 
 namespace WebApplication.Controllers
 {
@@ -32,13 +33,12 @@ namespace WebApplication.Controllers
 		public IEnumerable<Need> GetAll()
 		{
 			return _dbContext.Needs.ToList();
-			
 		}
 
 		[HttpGet("{id}", Name = "GetNeed")]
 		public IActionResult GetById(int id)
 		{
-			var need = _dbContext.Needs.Find(id);
+			var need = _dbContext.Needs.SingleOrDefault(x => x.Id == id);
 			if (need == null)
 			{
 				return BadRequest();
@@ -55,7 +55,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			var need = _dbContext.Needs.Find(id);
+			var need = _dbContext.Needs.SingleOrDefault(x => x.Id == id);
 			if (need == null)
 			{
 				return NotFound();
@@ -73,13 +73,13 @@ namespace WebApplication.Controllers
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var need = _dbContext.Needs.Find(id);
+			var need = _dbContext.Needs.SingleOrDefault(x => x.Id == id);
 			if (need == null)
 			{
 				return NotFound();
 			}
 
-			_dbContext.Needs.Remove(id);
+			_dbContext.Needs.Remove(need);
 			return new NoContentResult();
 		}
 	}

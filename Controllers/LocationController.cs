@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 using WebApplication.Data;
+using System.Linq;
 
 namespace WebApplication.Controllers
 {
@@ -37,7 +38,7 @@ namespace WebApplication.Controllers
 		[HttpGet("{id}", Name = "GetLocation")]
 		public IActionResult GetById(int id)
 		{
-			var location = _dbContext.Locations.Find(id);
+			var location = _dbContext.Locations.FirstOrDefault(x => x.Id == id);
 			if (location == null)
 			{
 				return BadRequest();
@@ -54,7 +55,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			var location = _dbContext.Locations.Find(id);
+			var location = _dbContext.Locations.FirstOrDefault(x => x.Id == id);
 			if (location == null)
 			{
 				return NotFound();
@@ -74,7 +75,7 @@ namespace WebApplication.Controllers
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var location = _dbContext.Locations.Find(id);
+			var location = _dbContext.Locations.FirstOrDefault(x => x.Id == id);
 			if (location == null)
 			{
 				return NotFound();

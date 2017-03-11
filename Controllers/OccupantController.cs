@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 using WebApplication.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WebApplication.Controllers
 {
@@ -37,7 +38,7 @@ namespace WebApplication.Controllers
 		[HttpGet("{id}", Name = "GetOccupant")]
 		public IActionResult GetById(int id)
 		{
-			var occupant = _dbContext.Occupants.Find(id);
+			var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
 			if (occupant == null)
 			{
 				return BadRequest();
@@ -54,7 +55,7 @@ namespace WebApplication.Controllers
 				return BadRequest();
 			}
 
-			var occupant = _dbContext.Occupants.Find(id);
+			var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
 			if (occupant == null)
 			{
 				return NotFound();
@@ -76,13 +77,13 @@ namespace WebApplication.Controllers
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var need = _dbContext.Occupants.Find(id);
-			if (need == null)
+			var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
+			if (occupant == null)
 			{
 				return NotFound();
 			}
 
-			_dbContext.Occupants.Remove(id);
+			_dbContext.Occupants.Remove(occupant);
 			return new NoContentResult();
 		}        
     }
