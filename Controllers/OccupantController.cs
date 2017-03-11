@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace WebApplication.Controllers
 {
+	[RouteAttribute("api/occupants")]
     public class OccupantController : Controller
     {
 		private ApplicationDbContext _dbContext;

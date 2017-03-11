@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace WebApplication.Controllers
 {
+	[RouteAttribute("api/needs")]
 	public class NeedController : Controller
 	{
 		private ApplicationDbContext _dbContext;

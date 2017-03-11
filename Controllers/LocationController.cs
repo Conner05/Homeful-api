@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace WebApplication.Controllers
 {
+	[Route("api/locations")]
     public class LocationController : Controller
     {
 		private ApplicationDbContext _dbContext;
