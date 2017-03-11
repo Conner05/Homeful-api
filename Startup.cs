@@ -47,15 +47,19 @@ namespace WebApplication
             if(string.IsNullOrWhiteSpace(productionConnectionString)) {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                services.AddDbContext<IdentityContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             }
             else {
                 services.AddDbContext<ApplicationDbContext>(options => 
+                    options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
+                services.AddDbContext<IdentityContext>(options => 
                     options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
             }
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
@@ -66,8 +70,11 @@ namespace WebApplication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbcontext)
         {
+            await dbcontext.Database.EnsureCreatedAsync();
+            await dbcontext.Database.MigrateAsync();
+            
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
