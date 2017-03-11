@@ -49,7 +49,8 @@ namespace WebApplication
             }
             else {
                 services.AddDbContext<ApplicationDbContext>(options => 
-                    options.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")));
+                    options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
+                    //options.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")));
             }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
