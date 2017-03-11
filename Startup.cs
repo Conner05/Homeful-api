@@ -43,7 +43,7 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            string productionConnectionString = Configuration.GetConnectionString("Prodution");
+            string productionConnectionString = Configuration.GetConnectionString("Production");
             if(string.IsNullOrWhiteSpace(productionConnectionString)) {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
@@ -52,9 +52,9 @@ namespace WebApplication
             }
             else {
                 services.AddDbContext<ApplicationDbContext>(options => 
-                    options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
+                    options.UseSqlServer(Configuration.GetConnectionString("Production")));
                 services.AddDbContext<IdentityContext>(options => 
-                    options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
+                    options.UseSqlServer(Configuration.GetConnectionString("Production")));
             }
 
 
