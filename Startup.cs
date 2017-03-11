@@ -43,14 +43,16 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            if(_env.IsDevelopment()) {
+            string productionConnectionString = Configuration.GetConnectionString("Prodution");
+            if(string.IsNullOrWhiteSpace(productionConnectionString)) {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             }
             else {
                 services.AddDbContext<ApplicationDbContext>(options => 
-                    options.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")));
+                    options.UseSqlServer(Configuration.GetConnectionString("Prodution")));
             }
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
