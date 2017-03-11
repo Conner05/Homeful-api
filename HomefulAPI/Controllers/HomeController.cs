@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -28,7 +29,7 @@ namespace HomefulAPI.Controllers
             return View();
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             Location l = new Location()
             {
@@ -40,7 +41,7 @@ namespace HomefulAPI.Controllers
             using (ApplicationDbContext c = new ApplicationDbContext())
             {
                 c.Locations.Add(l);
-                c.SaveChangesAsync();
+                await c.SaveChangesAsync();
             }
 
             return Redirect("/");
