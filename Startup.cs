@@ -17,8 +17,11 @@ namespace WebApplication
 {
     public class Startup
     {
+        readonly IHostingEnvironment _env;
         public Startup(IHostingEnvironment env)
         {
+            _env = env;
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -40,8 +43,14 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            if(_env.IsDevelopment()) {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            }
+            else {
+                services.AddDbContext<ApplicationDbContext>(options => 
+                    options.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")));
+            }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
