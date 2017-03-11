@@ -11,12 +11,19 @@ namespace HomefulAPI.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-            using (ApplicationDbContext c = new ApplicationDbContext())
+            try
             {
-                var locations = c.Locations.ToList();
-                ViewBag.Count = locations.Count();
+                ViewBag.Title = "Home Page";
+                using (ApplicationDbContext c = new ApplicationDbContext())
+                {
+                    var locations = c.Locations.ToList();
+                    ViewBag.Count = locations.Count();
 
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
             }
             return View();
         }
