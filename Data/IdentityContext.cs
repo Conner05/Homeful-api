@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Models;
 
 namespace WebApplication.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class IdentityContext : IdentityDbContext<ApplicationUser> 
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public IdentityContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
 
@@ -25,9 +22,5 @@ namespace WebApplication.Data
 
             this.Database.EnsureCreated();
         }
-
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<Need> Needs { get; set; }
-        public DbSet<Occupant> Occupants { get; set; }
     }
 }
