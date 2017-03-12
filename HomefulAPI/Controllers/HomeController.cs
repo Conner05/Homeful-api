@@ -12,39 +12,10 @@ namespace HomefulAPI.Controllers
     {
         public ActionResult Index()
         {
-            try
-            {
-                ViewBag.Title = "Home Page";
-                using (ApplicationDbContext c = new ApplicationDbContext())
-                {
-                    var locations = c.Locations.ToList();
-                    ViewBag.Count = locations.Count();
-
-                }
-            }
-            catch (Exception e)
-            {
-                ViewBag.Error = e.Message;
-            }
+            ViewBag.Title = "Home Page";
+             
             return View();
         }
 
-        public async Task<ActionResult> Create()
-        {
-            Location l = new Location()
-            {
-                Name = "Test",
-                Longitude = 0,
-                Latitude = 1
-            };
-
-            using (ApplicationDbContext c = new ApplicationDbContext())
-            {
-                c.Locations.Add(l);
-                await c.SaveChangesAsync();
-            }
-
-            return Redirect("/");
-        }
     }
 }

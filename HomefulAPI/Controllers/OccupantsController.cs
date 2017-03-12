@@ -10,87 +10,100 @@ namespace HomefulAPI.Controllers
     [RoutePrefix("api")]
     public class OccupantsController : ApiController
     {
-        private ApplicationDbContext _dbContext;
-
-        public OccupantsController(ApplicationDbContext dbContext)
+        
+        public OccupantsController()
         {
-            _dbContext = dbContext;
         }
 
         [HttpPost]
-        [Route("/occupants/{id}")]
+        [Route("occupants/{id}")]
         public IHttpActionResult Create([FromBody] Occupant item)
         {
-            if (item == null)
+            using (var _dbContext = new ApplicationDbContext())
             {
-                return BadRequest();
+                if (item == null)
+                {
+                    return BadRequest();
+                }
+
+                _dbContext.Occupants.Add(item);
+
+                return CreatedAtRoute("GetOccupant", new { id = item.Id }, item);
             }
-
-            _dbContext.Occupants.Add(item);
-
-            return CreatedAtRoute("GetOccupant", new { id = item.Id }, item);
         }
 
         [HttpGet]
-        [Route("/occupants")]
+        [Route("occupants")]
         public IHttpActionResult GetAll()
         {
-            return Ok(_dbContext.Occupants.ToList());
+            using (var _dbContext = new ApplicationDbContext())
+            {
+                return Ok(_dbContext.Occupants.ToList());
+            }
         }
 
         [HttpGet]
-        [Route("/occupants/{id}")]
+        [Route("occupants/{id}")]
         public IHttpActionResult Retrieve(int id)
         {
-            var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
-            if (occupant == null)
+            using (var _dbContext = new ApplicationDbContext())
             {
-                return BadRequest();
-            }
+                var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
+                if (occupant == null)
+                {
+                    return BadRequest();
+                }
 
-            return Ok(occupant);
+                return Ok(occupant);
+            }
         }
 
         [HttpPut]
-        [Route("/occupants/{id}")]
+        [Route("occupants/{id}")]
         public IHttpActionResult Update(int id, [FromBody] Occupant item)
         {
-            if (item == null || item.Id != id)
+            using (var _dbContext = new ApplicationDbContext())
             {
-                return BadRequest();
+                if (item == null || item.Id != id)
+                {
+                    return BadRequest();
+                }
+
+                var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
+                if (occupant == null)
+                {
+                    return NotFound();
+                }
+
+                //set fields to match item passed in
+                occupant.Name = item.Name;
+                occupant.Phone = item.Phone;
+                occupant.Email = item.Email;
+                occupant.Birthdate = item.Birthdate;
+                occupant.UpdatedOn = DateTime.Now;
+                occupant.Active = item.Active;
+                //TODO:  What about changing an occupant's location
+
+                _dbContext.SaveChanges();
+                return Ok();
             }
-
-            var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
-            if (occupant == null)
-            {
-                return NotFound();
-            }
-
-            //set fields to match item passed in
-            occupant.Name = item.Name;
-            occupant.Phone = item.Phone;
-            occupant.Email = item.Email;
-            occupant.Birthdate = item.Birthdate;
-            occupant.UpdatedOn = DateTime.Now;
-            occupant.Active = item.Active;
-            //TODO:  What about changing an occupant's location
-
-            _dbContext.SaveChanges();
-            return Ok();
         }
 
         [HttpDelete]
-        [Route("/occupants/{id}")]
+        [Route("occupants/{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
-            if (occupant == null)
+            using (var _dbContext = new ApplicationDbContext())
             {
-                return NotFound();
-            }
+                var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
+                if (occupant == null)
+                {
+                    return NotFound();
+                }
 
-            _dbContext.Occupants.Remove(occupant);
-            return Ok();
+                _dbContext.Occupants.Remove(occupant);
+                return Ok();
+            }
         }
     }
 }
