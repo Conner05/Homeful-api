@@ -14,7 +14,7 @@ namespace HomefulAPI.Models
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
         [DefaultValue("CURRENT_TIMESTAMP")]
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
