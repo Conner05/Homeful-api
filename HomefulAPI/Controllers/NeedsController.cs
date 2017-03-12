@@ -25,11 +25,15 @@ namespace HomefulAPI.Controllers
                 {
                     return BadRequest();
                 }
+
                 item.CreatedOn = DateTime.UtcNow;
                 item.UpdatedOn = DateTime.UtcNow;
+
                 _dbContext.Needs.Add(item);
 
-                return CreatedAtRoute("GetNeed", new { id = item.Id }, item);
+                _dbContext.SaveChanges();
+
+                return Ok(item);
             }
         }
 
@@ -93,10 +97,9 @@ namespace HomefulAPI.Controllers
                 need.OccupantId = item.OccupantId;
                 need.Quantity = item.Quantity;
                 
-
                 _dbContext.SaveChanges();
 
-                return Ok();
+                return Ok(need);
             }
         }
 
@@ -113,6 +116,9 @@ namespace HomefulAPI.Controllers
                 }
 
                 _dbContext.Needs.Remove(need);
+
+                _dbContext.SaveChanges();
+
                 return Ok();
             }
         }

@@ -29,9 +29,10 @@ namespace HomefulAPI.Controllers
                 }
 
                 _dbContext.Locations.Add(item);
+
                 _dbContext.SaveChanges();
 
-                return CreatedAtRoute("GetLocation", new { id = item.Id }, item);
+                return Ok(item);
             }
         }
 
@@ -99,7 +100,7 @@ namespace HomefulAPI.Controllers
 
                 _dbContext.SaveChanges();
 
-                return Ok();
+                return Ok(location);
             }
         }
 
@@ -116,6 +117,8 @@ namespace HomefulAPI.Controllers
                 }
 
                 _dbContext.Locations.Remove(location);
+
+                _dbContext.SaveChanges();
 
                 return Ok();
             }

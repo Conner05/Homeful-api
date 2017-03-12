@@ -28,10 +28,13 @@ namespace HomefulAPI.Controllers
                 }
               
                 item.CreatedOn = DateTime.UtcNow;
+                item.UpdatedOn = DateTime.UtcNow;
 
                 _dbContext.Occupants.Add(item);
 
-                return CreatedAtRoute("GetOccupant", new { id = item.Id }, item);
+                _dbContext.SaveChanges();
+
+                return Ok(item);
             }
         }
 
@@ -100,7 +103,8 @@ namespace HomefulAPI.Controllers
                 occupant.Active = item.Active;
 
                 _dbContext.SaveChanges();
-                return Ok();
+
+                return Ok(occupant);
             }
         }
 
@@ -117,6 +121,9 @@ namespace HomefulAPI.Controllers
                 }
 
                 _dbContext.Occupants.Remove(occupant);
+
+                _dbContext.SaveChanges();
+
                 return Ok();
             }
         }
