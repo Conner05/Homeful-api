@@ -26,7 +26,7 @@ namespace HomefulAPI.Controllers
                 {
                     return BadRequest();
                 }
-
+              
                 item.CreatedOn = DateTime.UtcNow;
 
                 _dbContext.Occupants.Add(item);
@@ -55,7 +55,7 @@ namespace HomefulAPI.Controllers
                 {
 
                     var occupant = _dbContext.Occupants
-                        .Include(x => x.Location)
+                        //.Include(x => x.Location)
                         .Include(x => x.Needs)
                         .FirstOrDefault(x => x.Id == id);
                     if (occupant == null)

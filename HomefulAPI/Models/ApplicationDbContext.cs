@@ -11,7 +11,7 @@ namespace HomefulAPI.Models
     {
         public ApplicationDbContext() : base(
 #if DEBUG
-            "Development"
+            System.Configuration.ConfigurationManager.ConnectionStrings["Development"].ConnectionString
 #else
             "Production"
 #endif
