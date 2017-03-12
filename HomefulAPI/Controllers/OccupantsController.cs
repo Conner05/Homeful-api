@@ -51,16 +51,25 @@ namespace HomefulAPI.Controllers
         {
             using (var _dbContext = new ApplicationDbContext())
             {
-                var occupant = _dbContext.Occupants
-                    .Include(x => x.Location)
-                    .Include(x => x.Needs)
-                    .FirstOrDefault(x => x.Id == id);
-                if (occupant == null)
+                try
                 {
-                    return NotFound();
-                }
 
-                return Ok(occupant);
+                    var occupant = _dbContext.Occupants
+                        .Include(x => x.Location)
+                        .Include(x => x.Needs)
+                        .FirstOrDefault(x => x.Id == id);
+                    if (occupant == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(occupant);
+
+                }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
             }
         }
 
