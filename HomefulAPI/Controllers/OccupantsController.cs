@@ -26,6 +26,8 @@ namespace HomefulAPI.Controllers
                     return BadRequest();
                 }
 
+                item.CreatedOn = DateTime.UtcNow;
+
                 _dbContext.Occupants.Add(item);
 
                 return CreatedAtRoute("GetOccupant", new { id = item.Id }, item);
@@ -80,9 +82,9 @@ namespace HomefulAPI.Controllers
                 occupant.Phone = item.Phone;
                 occupant.Email = item.Email;
                 occupant.Birthdate = item.Birthdate;
-                occupant.UpdatedOn = DateTime.Now;
+                occupant.UpdatedOn = DateTime.UtcNow;
+                occupant.LocationId = item.LocationId;
                 occupant.Active = item.Active;
-                //TODO:  What about changing an occupant's location
 
                 _dbContext.SaveChanges();
                 return Ok();

@@ -24,7 +24,8 @@ namespace HomefulAPI.Controllers
                 {
                     return BadRequest();
                 }
-
+                item.CreatedOn = DateTime.UtcNow;
+                item.UpdatedOn = DateTime.UtcNow;
                 _dbContext.Needs.Add(item);
 
                 return CreatedAtRoute("GetNeed", new { id = item.Id }, item);
@@ -41,7 +42,7 @@ namespace HomefulAPI.Controllers
             }
         }
 
-
+        [HttpGet]
         [Route("needs/{id}")]
         public IHttpActionResult Retrieve(int id)
         {
@@ -76,7 +77,11 @@ namespace HomefulAPI.Controllers
 
                 //set fields to match item passed in
                 need.Name = item.Name;
-                need.UpdatedOn = DateTime.Now;
+                need.UpdatedOn = DateTime.UtcNow;
+                need.LocationId = item.LocationId;
+                need.OccupantId = item.OccupantId;
+                need.Quantity = item.Quantity;
+                
 
                 _dbContext.SaveChanges();
 
