@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace HomefulAPI.Controllers
 {
-    public class MvcLocations : Controller
+    public class Locations : Controller
     {
         public ViewResult All()
         {
