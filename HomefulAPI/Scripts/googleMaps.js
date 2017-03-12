@@ -1,60 +1,111 @@
 ﻿var defaultPosition = { lat: 36.1627, lng: -86.7816 };
 var map;
+var selectedLocation;
+var selectedMarker;
 const LOCATIONS_ENDPOINT = 'http://homefulapi.azurewebsites.net/api/locations';
 //var getLocations = '/api/locations';
 
-
+function pinSymbol(color) {
+    return {
+        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+        fillColor: color,
+        fillOpacity: 1,
+        strokeColor: '#000',
+        strokeWeight: 2,
+        scale: 1,
+    };
+}
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 11,
+        zoom: 13,
         center: defaultPosition
     });
+
+    function createMarker(location) {
+        var newMarker = new google.maps.Marker({
+            position: { lat: location.Latitude, lng: location.Longitude },
+            map: map,
+            animation: google.maps.Animation.DROP,
+            draggable: true,
+            title: location.Name
+        });
+
+        addMarkerMouseup(location, newMarker);
+        addMarkerClick(newMarker, location);
+    }
 
     $.ajax({
         dataType: "json",
         url: LOCATIONS_ENDPOINT,
         success: function (locations) {
-            //locations.map(createMarker, map);
+            locations.map(createMarker);
         }
     });
 }
 
-function removeLocation(location, marker) {
-    marker.setMap(null);
+function removeLocation() {
+    selectedMarker.setMap(null);
+    $.ajax({
+        method: 'DELETE',
+        url: LOCATIONS_ENDPOINT + '/' + selectedLocation.Id,
+        data: selectedLocation,
+        success: function (l) {
+        }
+    });
+
     // TODO - make call to server to delete
 }
 
-function createInfowindow(map, marker, location) {
+function addMarkerClick(marker, location) {
     // TODO - fill in the content string with actual data from the location
     // TODO - make the data editable (edit a location)
     // TODO - add a delete/remove button in the infowindow
-    var contentString =
-        '<div id="content">' +
-        '<div id="siteNotice">' +
-        '</div>' +
-        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
-        '<div id="bodyContent">' +
-        '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-        'sandstone rock formation in the southern part of the ' +
-        'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
-        'south west of the nearest large town, Alice Springs; 450&#160;km ' +
-        '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
-        'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
-        'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
-        'Aboriginal people of the area. It has many springs, waterholes, ' +
-        'rock caves and ancient paintings. Uluru is listed as a World ' +
-        'Heritage Site.</p>' +
-        '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-        'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
-        '(last visited June 22, 2009).</p>' +
-        '</div>' +
-        '</div>';
-
+    
     var infowindow = new google.maps.InfoWindow({
-        content: contentString
+        content: '<div class="row">' +
+                '<div class="col s12">' +
+                '<div class="row">' +
+                '<div class="input-field col s12">' +
+                    '<label for="name" class="active">Name</label>' + 
+                    '<input type="text" name="name" class="validate" value="' + location.Name + '"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+        '</div>' + '<a class="waves-effect waves-light btn left" onclick="updateSelectedLocation()">Save</a>' +
+        '<a class="waves-effect waves-light btn right" onclick="removeLocation()">Delete</a>'
+
+    });
+    
+    marker.addListener('click', function () {
+        selectedLocation = location;
+        selectedMarker = marker;
+        infowindow.open(map, marker);
     });
 }
-
+function addMarkerMouseup(location, marker) {
+    marker.addListener('mouseup', function (m) {
+        location.Latitude = marker.position.lat;
+        location.Longitude = marker.position.lng;
+        $.ajax({
+            method: 'PUT',
+            url: LOCATIONS_ENDPOINT + '/' + location.Id,
+            data: location,
+            success: function (l) {
+                location = l;
+            }
+        });
+    });
+}
+function updateSelectedLocation() {
+    $.ajax({
+        method: 'PUT',
+        url: LOCATIONS_ENDPOINT + '/' + selectedLocation.Id,
+        data: selectedLocation,
+        success: function (l) {
+            selectedLocation = l;
+        }
+    });
+}
 function createLocation() {
     // Place a draggable marker on the map
     var newLocation = {
@@ -66,6 +117,7 @@ function createLocation() {
     var newMarker = new google.maps.Marker({
         position: defaultPosition,
         map: map,
+        icon: pinSymbol('lightblue'),
         animation: google.maps.Animation.DROP,
         draggable: true,
         title: 'Drag me!'
@@ -78,26 +130,9 @@ function createLocation() {
             newLocation = location;
             console.log('created location');
             console.log(newLocation);
+            addMarkerMouseup(newLocation, newMarker);
+            addMarkerClick(newMarker, newLocation);
         }
     });
-    newMarker.addListener('mouseup', function (marker) {
-        newLocation.latitude = newMarker.position.lat;
-        newLocation.longitude = newMarker.position.lng;
-        // TODO - make this a PUT - too tired to think of how it should save
-        $.ajax({
-            method: 'PUT',
-            url: LOCATIONS_ENDPOINT + '/' + newLocation.id,
-            data: newLocation,
-            success: function (location) {
-                newLocation = location;
-                console.log('updated location');
-                console.log(newLocation);
-            }
-        });
-    });
     
-    newMarker.addListener('click', function (marker) {
-        console.log('click');
-        createInfowindow(map, marker, newLocation);
-    });
 }
