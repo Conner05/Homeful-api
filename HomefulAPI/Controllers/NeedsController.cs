@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Data.Entity;
 
 namespace HomefulAPI.Controllers
 {
@@ -48,7 +49,9 @@ namespace HomefulAPI.Controllers
         {
             using (var _dbContext = new ApplicationDbContext())
             {
-                var need = _dbContext.Needs.SingleOrDefault(x => x.Id == id);
+                var need = _dbContext.Needs
+                    .Include(x => x.Location)
+                    .SingleOrDefault(x => x.Id == id);
                 if (need == null)
                 {
                     return NotFound();

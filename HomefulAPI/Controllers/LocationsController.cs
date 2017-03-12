@@ -60,7 +60,11 @@ namespace HomefulAPI.Controllers
         {
             using (var _dbContext = new ApplicationDbContext())
             {
-                var location = _dbContext.Locations.FirstOrDefault(x => x.Id == id);
+                var location = _dbContext.Locations
+                    .Include(x => x.Needs)
+                    .Include(x => x.Occupants)
+                    .FirstOrDefault(x => x.Id == id);
+
                 if (location == null)
                 {
                     return BadRequest();
