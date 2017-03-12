@@ -42,7 +42,27 @@
             @Html.DisplayFor(model => model.Notes)
         </dd>
 
+        <dt>
+            Needs
+        </dt>
+        <dd>
+            <ul>
+                @foreach (HomefulAPI.Models.Need need in Model.Needs)
+                {
+                    <li>
+                        <p>
+                            @Html.ActionLink("X", "Complete", "Needs", new { @id = need.Id }, null) 
+                            @need.Name (@need.Quantity)
+                        </p>
+                            
+                    </li>
+                }
+                <li>@Html.ActionLink("Add new need", "Create", "Needs", new { @id = Model.Id }, null)</li>
+            </ul>
+        </dd>
     </dl>
+
+  
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

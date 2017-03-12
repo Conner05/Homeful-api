@@ -22,5 +22,6 @@ namespace HomefulAPI.Models
         [DefaultValue("CURRENT_TIMESTAMP")]
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
+        public bool Active { get; set; }
     }
 }

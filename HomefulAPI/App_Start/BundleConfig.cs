@@ -32,6 +32,11 @@ namespace HomefulAPI
            //           "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/bundles/materializecss", "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css").Include(
+                    "~/Content/materializecss"));
+            bundles.Add(new ScriptBundle("~/bundles/materializejs", "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js").Include(
+                    "~/Scripts/materializejs"));
+
             BundleTable.EnableOptimizations = true;
             bundles.UseCdn = true;
         }

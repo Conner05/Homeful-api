@@ -10,6 +10,9 @@ namespace HomefulAPI.ViewModels.Needs
 {
     public class CreateNeedViewModel
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         [Description("Need description")]
         public string Name { get; set; }

@@ -28,7 +28,10 @@ namespace HomefulAPI.Controllers.MVC
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Location location = await db.Locations.FindAsync(id);
+            Location location = await db.Locations.Include(l => l.Needs)
+                .Where(l => l.Id == id)
+                .FirstOrDefaultAsync();
+            location.Needs = location.Needs.Where(n => n.Active).ToList();
             if (location == null)
             {
                 return HttpNotFound();
