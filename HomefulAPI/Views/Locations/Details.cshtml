@@ -51,7 +51,9 @@
                 {
                     <li>
                         <p>
-                            @Html.ActionLink("X", "Complete", "Needs", new { @id = need.Id }, null) 
+                            <a href="/needs/complete/@need.Id">
+                                <i class="material-icons">check</i>
+                            </a>
                             @need.Name (@need.Quantity)
                         </p>
                             
