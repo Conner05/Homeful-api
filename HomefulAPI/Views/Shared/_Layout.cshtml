@@ -38,6 +38,8 @@
 
     <script>
         $(".button-collapse").sideNav();
+        $('#notes').val('New Text');
+        $('#notes').trigger('autoresize');
     </script>
 
     @RenderSection("scripts", required: false)
