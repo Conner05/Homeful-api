@@ -176,9 +176,9 @@
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MVC\LocationsController.cs" />
     <Compile Include="Controllers\MVC\NeedsController.cs" />
+    <Compile Include="Controllers\MVC\PackListController.cs" />
     <Compile Include="Controllers\NeedsController.cs" />
     <Compile Include="Controllers\OccupantsController.cs" />
-    <Compile Include="Controllers\PackListController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -189,6 +189,7 @@
     <Compile Include="Models\Occupant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Needs\CreateNeedViewModel.cs" />
+    <Compile Include="ViewModels\PckList\ChooseCampsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -250,6 +251,7 @@
     <Content Include="Views\Locations\Edit.cshtml" />
     <Content Include="Views\Locations\Index.cshtml" />
     <Content Include="Views\Needs\Create.cshtml" />
+    <Content Include="Views\PackList\ChooseCamps.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

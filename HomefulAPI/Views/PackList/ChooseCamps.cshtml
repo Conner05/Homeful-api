@@ -1,0 +1,38 @@
+﻿@model IEnumerable<HomefulAPI.ViewModels.PckList.ChooseCampsViewModel>
+
+@{
+    ViewBag.Title = "ChooseCamps";
+}
+
+<h2>ChooseCamps</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Html.BeginForm())
+{
+
+    <table class="table">
+        <tr>
+            <th>Select?</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>                
+                @Html.CheckBoxFor(modelItem => item.Selected)
+                @Html.LabelFor(modelItem => item.Selected)
+
+
+            </td>
+            <td>
+            </td>
+        </tr>
+    }
+
+    </table>
+    <button type="submit">Load</button>
+}
