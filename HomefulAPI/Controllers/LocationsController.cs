@@ -18,7 +18,7 @@ namespace HomefulAPI.Controllers
 
 
         [HttpPost]
-        [Route("locations/{id}")]
+        [Route("locations")]
         public IHttpActionResult Create([FromBody] Location item)
         {
             using (var _dbContext = new ApplicationDbContext())

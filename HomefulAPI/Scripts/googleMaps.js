@@ -10,14 +10,6 @@ function initMap() {
         center: defaultPosition
     });
 
-    function createMarker(location, map) {
-        var marker = new google.maps.Marker({
-            position: { lat: 36.1637, lng: -86.79 },
-            //position: { lat: location.Latitude, lng: location.Lsongitude },
-            map: map
-        });
-    }
-
     $.ajax({
         dataType: "json",
         url: LOCATIONS_ENDPOINT,
@@ -66,7 +58,7 @@ function createInfowindow(map, marker, location) {
 function createLocation() {
     // Place a draggable marker on the map
     var newLocation = {
-        name: '',
+        name: 'New Camp',
         latitude: defaultPosition.lat,
         longitude: defaultPosition.lng,
         notes: ''
@@ -76,22 +68,36 @@ function createLocation() {
         map: map,
         animation: google.maps.Animation.DROP,
         draggable: true,
-        title: "Drag me!"
+        title: 'Drag me!'
+    });
+    $.ajax({
+        method: 'POST',
+        url: LOCATIONS_ENDPOINT,
+        data: newLocation,
+        success: function (location) {
+            newLocation = location;
+            console.log('created location');
+            console.log(newLocation);
+        }
     });
     newMarker.addListener('mouseup', function (marker) {
         newLocation.latitude = newMarker.position.lat;
         newLocation.longitude = newMarker.position.lng;
         // TODO - make this a PUT - too tired to think of how it should save
-        /*$.post({
+        $.ajax({
+            method: 'PUT',
             url: LOCATIONS_ENDPOINT + '/' + newLocation.id,
             data: newLocation,
             success: function (location) {
-
+                newLocation = location;
+                console.log('updated location');
+                console.log(newLocation);
             }
-        });*/
+        });
     });
     
     newMarker.addListener('click', function (marker) {
+        console.log('click');
         createInfowindow(map, marker, newLocation);
     });
 }
