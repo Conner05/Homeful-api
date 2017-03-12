@@ -51,7 +51,7 @@ namespace HomefulAPI.Controllers
                 var need = _dbContext.Needs.SingleOrDefault(x => x.Id == id);
                 if (need == null)
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
 
                 return Ok(need);

@@ -53,7 +53,7 @@ namespace HomefulAPI.Controllers
                 var occupant = _dbContext.Occupants.FirstOrDefault(x => x.Id == id);
                 if (occupant == null)
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
 
                 return Ok(occupant);
