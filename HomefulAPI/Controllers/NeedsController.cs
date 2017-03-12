@@ -16,7 +16,7 @@ namespace HomefulAPI.Controllers
         }
 
         [HttpPost]
-        [Route("needs/{id}")]
+        [Route("needs")]
         public IHttpActionResult Create([FromBody] Need item)
         {
             using (var _dbContext = new ApplicationDbContext())

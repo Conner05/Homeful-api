@@ -17,7 +17,7 @@ namespace HomefulAPI.Controllers
         }
 
         [HttpPost]
-        [Route("occupants/{id}")]
+        [Route("occupants")]
         public IHttpActionResult Create([FromBody] Occupant item)
         {
             using (var _dbContext = new ApplicationDbContext())
