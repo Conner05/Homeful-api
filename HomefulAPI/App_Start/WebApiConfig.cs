@@ -18,6 +18,9 @@ namespace HomefulAPI
             config.EnableCors(cors);
             config.Formatters.JsonFormatter.SupportedMediaTypes
                 .Add(new MediaTypeHeaderValue("text/html"));
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+}
             config.MapHttpAttributeRoutes();
 
             /*config.Routes.MapHttpRoute(
